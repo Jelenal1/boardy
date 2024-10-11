@@ -7,11 +7,18 @@ export async function getCards() {
 }
 
 export async function getCard(id: number) {
-  return await db
+  const card = await db
     .select()
     .from(cardTable)
     .where(eq(cardTable.id, sql`'${id}'`))
     .limit(1);
+
+  const labels = await getLabelsOfCard(id);
+  const cardWithLabels = {
+    ...card,
+    labels: labels,
+  };
+  return cardWithLabels;
 }
 
 export async function getLabels() {

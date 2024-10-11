@@ -1,0 +1,12 @@
+import { getCard } from "~/utils/queries";
+
+export const revalidate = 1;
+export async function GET({ params }: { params: { id: string } },) {
+
+  try {
+    const card = await getCard(parseInt(params.id, 10))
+    return new Response(JSON.stringify(card));
+  } catch (error) {
+    return new Response(JSON.stringify({ error: (error as Error).message }));
+  }
+}
