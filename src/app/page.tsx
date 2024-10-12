@@ -1,7 +1,25 @@
-export default function HomePage() {
-  return <main>
+import Card from "~/components/Card";
+import type { GetCardsResult } from "./utils/types";
 
+export default async function HomePage() {
+  const cards: GetCardsResult = [
+    {
+      id: 1,
+      title: "Test 1",
+      status: "todo",
+      description: "Test 1 description",
+      listId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
 
-
-  </main>;
+  return (
+    <main className="flex min-h-screen flex-col items-center bg-black">
+      <h1 className="text-5xl font-bold">Boardy</h1>
+      {cards.map((card) => (
+        <Card key={card.id} initialCard={card} />
+      ))}
+    </main>
+  );
 }

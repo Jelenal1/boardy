@@ -1,12 +1,10 @@
-import { getCards } from "~/utils/queries";
+import { getCards } from "~/app/utils/queries";
 
 export async function GET() {
-
-    try {
-        const cards = await getCards()
-        return new Response(JSON.stringify(cards));
-    } catch (error) {
-        return new Response(JSON.stringify({ error: (error as Error).message }));
-    }
-
+  try {
+    const cards = await getCards();
+    return new Response(JSON.stringify(cards));
+  } catch (error) {
+    return new Response(JSON.stringify({ error: (error as Error).message }));
+  }
 }
