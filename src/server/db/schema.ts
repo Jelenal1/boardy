@@ -63,7 +63,7 @@ export const cardTable = createTable(
   {
     id: bigserial("id", { mode: "number" }).primaryKey(),
     title: varchar("name", { length: 256 }).notNull().default(""),
-    status: varchar("status", { length: 256 }).notNull(),
+    status: varchar("status", { length: 256 }).default("todo").notNull(),
     description: text("description"),
     listId: bigint("list_id", { mode: "number" })
       .references(() => listTable.id)
