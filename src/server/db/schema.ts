@@ -6,6 +6,7 @@ import {
   bigint,
   bigserial,
   index,
+  pgEnum,
   pgTableCreator,
   primaryKey,
   text,
@@ -58,13 +59,19 @@ export const cardToLabel = createTable(
   }),
 );
 
+export const Status = pgEnum("status", ["todo", "inprogress", "done"]);
+
 export const cardTable = createTable(
   "card",
   {
     id: bigserial("id", { mode: "number" }).primaryKey(),
     title: varchar("name", { length: 256 }).notNull().default(""),
-    status: varchar("status", { length: 256 }).default("todo").notNull(),
+    status: Status("status").default("todo").notNull(),
     description: text("description"),
+    dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
+    responsability: bigint("responsability", { mode: "number" })
+      .references(() => userTable.id)
+      .notNull(),
     listId: bigint("list_id", { mode: "number" })
       .references(() => listTable.id)
       .notNull(),

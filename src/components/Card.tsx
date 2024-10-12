@@ -1,11 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Card } from "~/app/utils/types";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import type { Card, Label } from "~/app/utils/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const Card = ({ initialCard }: { initialCard: Card }) => {
   const [card, setCard] = useState<Card>(initialCard);
+  const [status, setStatus] = useState<"todo" | "inprogress" | "done">(
+    card.status,
+  );
+  const [labels, setLabels] = useState<Label[]>([]);
+
+  const updateStatus = async (value: "todo" | "inprogress" | "done") => {
+    setCard({ ...card, status: value });
+    setStatus(value);
+  };
+
+  const fetchLabels = async (id: number) => {
+    const fetchedLabels = await fetch(`/api/getCards/${id}/getLabels`, {
+      next: { revalidate: 10 },
+    });
+  };
 
   useEffect(() => {
     setCard(initialCard);
@@ -28,16 +49,31 @@ const Card = ({ initialCard }: { initialCard: Card }) => {
       >
         {card.description}
       </p>
-      <Select>
+      <Select
+        value={status}
+        onValueChange={(value: "todo" | "inprogress" | "done") =>
+          updateStatus(value)
+        }
+      >
         <SelectTrigger>
-          <span>{card.status}</span>
+          <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="todo">todo</SelectItem>
-          <SelectItem value="in-progress">in-progress</SelectItem>
-          <SelectItem value="done">done</SelectItem>
+          <SelectItem value="todo">Todo</SelectItem>
+          <SelectItem value="inprogress">In progress</SelectItem>
+          <SelectItem value="done">Done</SelectItem>
         </SelectContent>
       </Select>
+      <div className="flex h-10 rounded-md border border-white">
+        {labels.map((label) => (
+          <div
+            key={label.id}
+            className="inline-block w-10 rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700"
+          >
+            {label.title}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

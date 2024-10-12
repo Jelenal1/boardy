@@ -6,9 +6,11 @@ export default async function HomePage() {
     {
       id: 1,
       title: "Test 1",
-      status: "todo",
+      status: "done",
       description: "Test 1 description",
       listId: 1,
+      dueDate: new Date(),
+      responsability: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
     },

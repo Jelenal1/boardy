@@ -1,5 +1,6 @@
 import { getCards } from "~/app/utils/queries";
 
+export const revalidate = 1;
 export async function GET() {
   try {
     const cards = await getCards();

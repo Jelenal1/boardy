@@ -13,12 +13,7 @@ export async function getCard(id: number) {
     .where(eq(cardTable.id, sql`'${id}'`))
     .limit(1);
 
-  const labels = await getLabelsOfCard(id);
-  const cardWithLabels = {
-    ...card,
-    labels: labels,
-  };
-  return cardWithLabels;
+  return card;
 }
 
 export async function getLabels() {
