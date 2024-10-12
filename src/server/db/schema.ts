@@ -155,6 +155,11 @@ export const boardToUser = createTable(
   }),
 );
 
+export const cardToUser = createTable("card_to_user", {
+  cardId: bigint("card_id", { mode: "number" }).references(() => cardTable.id),
+  userId: bigint("user_id", { mode: "number" }).references(() => userTable.id),
+});
+
 export const userTable = createTable(
   "user",
   {

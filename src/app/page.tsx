@@ -1,27 +1,25 @@
-import Card from "~/components/Card";
-import type { GetCardsResult } from "./utils/types";
+import List from "~/components/List";
+
+export const revalidate = 30;
 
 export default async function HomePage() {
-  const cards: GetCardsResult = [
+  const lists: List[] = [
     {
       id: 1,
-      title: "Test 1",
-      status: "done",
-      description: "Test 1 description",
-      listId: 1,
-      dueDate: new Date(),
-      responsability: 1,
+      title: "To Do",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   ];
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-black">
-      <h1 className="text-5xl font-bold">Boardy</h1>
-      {cards.map((card) => (
-        <Card key={card.id} initialCard={card} />
-      ))}
+    <main className="flex min-h-screen flex-col items-center bg-zinc-900">
+      <h1 className="mb-4 mt-2 text-5xl font-bold">Boardy</h1>
+      <div className="mx-2 flex w-full overflow-x-scroll">
+        {lists.map((list) => (
+          <List key={list.id} initialList={list} />
+        ))}
+      </div>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import type { cardTable, labelTable } from "~/server/db/schema";
+import type { cardTable, labelTable, listTable } from "~/server/db/schema";
 
 // Updated Types using $inferSelect
 
@@ -7,6 +7,9 @@ export type Card = typeof cardTable.$inferSelect;
 
 // Full row type of `labelTable`
 export type Label = typeof labelTable.$inferSelect;
+
+// Full row type of `listTable`
+export type List = typeof listTable.$inferSelect;
 
 // Types for queries
 
@@ -29,8 +32,8 @@ export type GetLabelsOfCardResult = {
   updatedAt: Label["updatedAt"];
 }[];
 
-// getLists query should return Cards (consider renaming to getCards)
-export type GetListsResult = Card[];
+// getLists query returns an array of Lists
+export type GetListsResult = List[];
 
-// getList query returns a single Card or undefined (due to limit(1))
-export type GetListResult = Card | undefined;
+// getList query returns a List
+export type GetListResult = List;

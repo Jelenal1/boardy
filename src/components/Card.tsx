@@ -35,7 +35,7 @@ const Card = ({ initialCard }: { initialCard: Card }) => {
   return (
     <div
       key={card.id}
-      className="m-4 flex w-full max-w-[300px] flex-col gap-4 rounded-md border-2 border-white p-4 text-center"
+      className="mx-auto flex w-full max-w-[300px] flex-col gap-4 rounded-md border-2 border-white p-4 text-center"
     >
       <h2
         className="rounded-md text-xl font-bold outline outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500"

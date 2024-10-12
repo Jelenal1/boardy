@@ -1,9 +1,23 @@
+"use server";
 import { and, eq, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { db } from "~/server/db";
-import { cardTable, cardToLabel, labelTable } from "~/server/db/schema";
+import {
+  cardTable,
+  cardToLabel,
+  labelTable,
+  listTable,
+} from "~/server/db/schema";
 
 export async function getCards() {
   return await db.select().from(cardTable);
+}
+
+export async function getCardsOfList(listId: number) {
+  return await db
+    .select()
+    .from(cardTable)
+    .where(eq(cardTable.listId, sql`'${listId}'`));
 }
 
 export async function getCard(id: number) {
@@ -13,6 +27,7 @@ export async function getCard(id: number) {
     .where(eq(cardTable.id, sql`'${id}'`))
     .limit(1);
 
+  revalidatePath(`/api/getCards/${id}`);
   return card;
 }
 
@@ -43,7 +58,7 @@ export async function getLabelsOfCard(cardId: number) {
 }
 
 export async function getLists() {
-  return await db.select().from(cardTable);
+  return await db.select().from(listTable);
 }
 
 export async function getList(id: number) {

@@ -6,3 +6,15 @@
     --radius: 0.5rem
   }
 }
+
+::-webkit-scrollbar {
+  background-color: transparent;
+  border-top: #d1d5db;
+  border-bottom: #d1d5db;
+  width: 100%;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: var(--radius);
+}
