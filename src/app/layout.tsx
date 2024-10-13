@@ -22,13 +22,21 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
-        <body className="text-white bg-zinc-900">
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+        <body className="bg-zinc-900 text-white">
+          <header>
+            <div>
+              <h1>Boardy</h1>
+            </div>
+            <div className="ml-auto mr-10">
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+          </header>
+
           {children}
         </body>
       </html>
