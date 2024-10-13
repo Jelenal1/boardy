@@ -1,26 +1,15 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import type { CARD, LABEL } from "~/utils/types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { LuText } from "react-icons/lu";
+import { updateCard } from "~/utils/queries";
+import type { CARD } from "~/utils/types";
+import CardMoreButton from "./CardMoreButton";
+import ReactiveInput from "./ReactiveInput";
 
 const Card = ({ initialCard }: { initialCard: CARD }) => {
-  const [card, setCard] = useState<CARD>(initialCard);
-  const [status, setStatus] = useState<"todo" | "inprogress" | "done">(
-    card.status,
-  );
-  const [labels, setLabels] = useState<LABEL[]>([]);
+  const { userId } = auth();
 
-  const updateStatus = async (value: "todo" | "inprogress" | "done") => {
-    setCard({ ...card, status: value });
-    setStatus(value);
-  };
+  if (!userId) redirect("/signin");
 
   const fetchLabels = async (id: number) => {
     const fetchedLabels = await fetch(`/api/getCards/${id}/getLabels`, {
@@ -28,52 +17,33 @@ const Card = ({ initialCard }: { initialCard: CARD }) => {
     });
   };
 
-  useEffect(() => {
-    setCard(initialCard);
-  }, []);
-
   return (
-    <div
-      key={card.id}
-      className="mx-auto flex w-full flex-col gap-4 rounded-md border-2 border-white p-4 text-center"
-    >
-      <h2
-        className="rounded-md text-xl font-bold outline outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        contentEditable={true}
-      >
-        {card.title}
-      </h2>
-      <p
-        className="rounded-md outline outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        contentEditable={true}
-      >
-        {card.description}
-      </p>
-      <Select
-        value={status}
-        onValueChange={(value: "todo" | "inprogress" | "done") =>
-          updateStatus(value)
-        }
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Status" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todo">Todo</SelectItem>
-          <SelectItem value="inprogress">In progress</SelectItem>
-          <SelectItem value="done">Done</SelectItem>
-        </SelectContent>
-      </Select>
-      <div className="flex h-10 rounded-md border border-white">
-        {labels.map((label) => (
-          <div
-            key={label.id}
-            className="inline-block w-10 rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold text-gray-700"
-          >
-            {label.title}
-          </div>
-        ))}
-      </div>
+    <div className="mx-auto flex w-full flex-col gap-4 rounded-md border-2 border-zinc-900 p-4 text-center">
+      <CardMoreButton card={initialCard} className="ml-auto" />
+
+      <ReactiveInput
+        headerText={initialCard.title}
+        label="Title"
+        icon={<LuText />}
+        handleUpdate={async (innerText) => {
+          "use server";
+          updateCard({
+            ...initialCard,
+            title: innerText,
+          });
+        }}
+      />
+
+      <ReactiveInput
+        label="Description"
+        icon={<LuText />}
+        inputType="textarea"
+        headerText={initialCard.description}
+        handleUpdate={async (innerText) => {
+          "use server";
+          updateCard({ ...initialCard, description: innerText });
+        }}
+      />
     </div>
   );
 };

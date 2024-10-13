@@ -9,6 +9,18 @@ import {
 } from "~/server/db/schema";
 import { CARD, LIST } from "./types";
 
+export async function updateCard(card: Omit<CARD, "createdAt" | "updatedAt">) {
+  return await db
+    .update(cardTable)
+    .set(card)
+    .where(eq(cardTable.id, card.id))
+    .returning();
+}
+
+export async function deleteCard(id: number) {
+  await db.delete(cardTable).where(eq(cardTable.id, id));
+}
+
 export async function createCard(
   card: Omit<CARD, "id" | "createdAt" | "updatedAt">,
 ) {
@@ -74,7 +86,7 @@ export async function updateList(list: Omit<LIST, "createdAt" | "updatedAt">) {
 }
 
 export async function deleteList(id: number) {
-  return await db.delete(listTable).where(eq(listTable.id, id));
+  await db.delete(listTable).where(eq(listTable.id, id));
 }
 
 export async function getListsByBoardId(boardId: number) {

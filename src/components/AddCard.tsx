@@ -15,8 +15,8 @@ const AddCard = ({
     try {
       await createCard({
         listId: listId,
-        title: "",
-        description: "",
+        title: "Title",
+        description: "Description",
         status: "todo",
         user_uids: [],
         dueDate: new Date(),

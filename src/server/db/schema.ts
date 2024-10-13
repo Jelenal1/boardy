@@ -68,12 +68,12 @@ export const cardTable = createTable(
     listId: integer("list_id")
       .references(() => listTable.id, {
         onDelete: "cascade",
-        onUpdate: "cascade",
+        onUpdate: "no action",
       })
       .notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     status: Status("status").default("todo").notNull(),
-    description: text("description"),
+    description: text("description").default("").notNull(),
     position: integer("position").unique().notNull(),
     dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
