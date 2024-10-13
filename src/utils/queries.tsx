@@ -1,6 +1,5 @@
 "use server";
-import { and, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import {
   cardTable,
@@ -8,26 +7,29 @@ import {
   labelTable,
   listTable,
 } from "~/server/db/schema";
+import { CARD, LIST } from "./types";
+
+export async function createCard(
+  card: Omit<CARD, "id" | "createdAt" | "updatedAt">,
+) {
+  return await db.insert(cardTable).values(card).returning();
+}
 
 export async function getCards() {
   return await db.select().from(cardTable);
 }
 
 export async function getCardsOfList(listId: number) {
-  return await db
-    .select()
-    .from(cardTable)
-    .where(eq(cardTable.listId, sql`'${listId}'`));
+  return await db.select().from(cardTable).where(eq(cardTable.listId, listId));
 }
 
 export async function getCard(id: number) {
   const card = await db
     .select()
     .from(cardTable)
-    .where(eq(cardTable.id, sql`'${id}'`))
+    .where(eq(cardTable.id, id))
     .limit(1);
 
-  revalidatePath(`/api/getCards/${id}`);
   return card;
 }
 
@@ -50,11 +52,22 @@ export async function getLabelsOfCard(cardId: number) {
       cardToLabel,
       and(
         eq(cardToLabel.labelId, labelTable.id),
-        eq(cardToLabel.cardId, sql`'${cardId}'`),
+        eq(cardToLabel.cardId, cardId),
       ),
     )
     .innerJoin(cardTable, eq(cardTable.id, cardToLabel.cardId))
-    .where(eq(cardTable.id, sql`'${cardId}'`));
+    .where(eq(cardTable.id, cardId));
+}
+
+export async function createList(list: Omit<LIST, "id" | "createdAt" | "updatedAt">) {
+  return await db.insert(listTable).values(list).returning();
+}
+
+export async function getListsByBoardId(boardId: number) {
+  return await db
+    .select()
+    .from(listTable)
+    .where(eq(listTable.boardId, boardId));
 }
 
 export async function getLists() {
@@ -62,9 +75,5 @@ export async function getLists() {
 }
 
 export async function getList(id: number) {
-  return await db
-    .select()
-    .from(cardTable)
-    .where(eq(cardTable.id, sql`'${id}'`))
-    .limit(1);
+  return await db.select().from(cardTable).where(eq(cardTable.id, id)).limit(1);
 }

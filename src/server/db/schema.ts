@@ -3,12 +3,12 @@
 
 import { sql } from "drizzle-orm";
 import {
-  bigint,
-  bigserial,
   index,
+  integer,
   pgEnum,
   pgTableCreator,
   primaryKey,
+  serial,
   text,
   timestamp,
   varchar,
@@ -25,7 +25,7 @@ export const createTable = pgTableCreator((name) => `boardy_${name}`);
 export const labelTable = createTable(
   "label",
   {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
+    id: serial("id").primaryKey(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     tailwindColor: varchar("tailwind_color", { length: 256 }).notNull(),
     cssolor: varchar("css_color", { length: 256 }),
@@ -45,12 +45,8 @@ export const labelTable = createTable(
 export const cardToLabel = createTable(
   "card_to_label",
   {
-    cardId: bigint("card_id", { mode: "number" }).references(
-      () => cardTable.id,
-    ),
-    labelId: bigint("label_id", { mode: "number" }).references(
-      () => labelTable.id,
-    ),
+    cardId: integer("card_id").references(() => cardTable.id),
+    labelId: integer("label_id").references(() => labelTable.id),
   },
   (cardToLabel) => ({
     pk: primaryKey({
@@ -64,15 +60,13 @@ export const Status = pgEnum("status", ["todo", "inprogress", "done"]);
 export const cardTable = createTable(
   "card",
   {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
+    id: serial("id").primaryKey(),
+    user_uids: text("user_uids").array().default([]).notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     status: Status("status").default("todo").notNull(),
     description: text("description"),
     dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
-    responsability: bigint("responsability", { mode: "number" })
-      .references(() => userTable.id)
-      .notNull(),
-    listId: bigint("list_id", { mode: "number" })
+    listId: integer("list_id")
       .references(() => listTable.id)
       .notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
@@ -90,7 +84,11 @@ export const cardTable = createTable(
 export const listTable = createTable(
   "list",
   {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
+    id: serial("id").primaryKey(),
+    user_uids: text("user_uids").array().default([]).notNull(),
+    boardId: integer("board_id")
+      .references(() => boardTable.id)
+      .notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -104,27 +102,11 @@ export const listTable = createTable(
   }),
 );
 
-export const listToUser = createTable(
-  "list_to_user",
-  {
-    listId: bigint("list_id", { mode: "number" }).references(
-      () => listTable.id,
-    ),
-    userId: bigint("user_id", { mode: "number" }).references(
-      () => userTable.id,
-    ),
-  },
-  (listToUser) => ({
-    pk: primaryKey({
-      columns: [listToUser.listId, listToUser.userId],
-    }),
-  }),
-);
-
 export const boardTable = createTable(
   "board",
   {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
+    id: serial("id").primaryKey(),
+    user_uids: text("user_uids").array().default([]).notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -135,45 +117,5 @@ export const boardTable = createTable(
   },
   (board) => ({
     nameIndex: index("board_title_idx").on(board.title),
-  }),
-);
-
-export const boardToUser = createTable(
-  "board_to_user",
-  {
-    boardId: bigint("board_id", { mode: "number" }).references(
-      () => boardTable.id,
-    ),
-    userId: bigint("user_id", { mode: "number" }).references(
-      () => userTable.id,
-    ),
-  },
-  (boardToUser) => ({
-    pk: primaryKey({
-      columns: [boardToUser.boardId, boardToUser.userId],
-    }),
-  }),
-);
-
-export const cardToUser = createTable("card_to_user", {
-  cardId: bigint("card_id", { mode: "number" }).references(() => cardTable.id),
-  userId: bigint("user_id", { mode: "number" }).references(() => userTable.id),
-});
-
-export const userTable = createTable(
-  "user",
-  {
-    id: bigserial("id", { mode: "number" }).primaryKey(),
-    username: varchar("username", { length: 256 }),
-    password: varchar("password", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (user) => ({
-    usernameIndex: index("username_idx").on(user.username),
   }),
 );

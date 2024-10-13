@@ -3,37 +3,37 @@ import type { cardTable, labelTable, listTable } from "~/server/db/schema";
 // Updated Types using $inferSelect
 
 // Full row type of `cardTable`
-export type Card = typeof cardTable.$inferSelect;
+export type CARD = typeof cardTable.$inferSelect;
 
 // Full row type of `labelTable`
-export type Label = typeof labelTable.$inferSelect;
+export type LABEL = typeof labelTable.$inferSelect;
 
 // Full row type of `listTable`
-export type List = typeof listTable.$inferSelect;
+export type LIST = typeof listTable.$inferSelect;
 
 // Types for queries
 
 // getCards query returns an array of Cards
-export type GetCardsResult = Card[];
+export type GetCardsResult = CARD[];
 
 // getCard query returns a single Card or undefined (due to limit(1))
-export type GetCardResult = Card | undefined;
+export type GetCardResult = CARD | undefined;
 
 // getLabels query returns an array of Labels
-export type GetLabelsResult = Label[];
+export type GetLabelsResult = LABEL[];
 
 // getLabelsOfCard query returns a subset of Label fields for a specific card
 export type GetLabelsOfCardResult = {
-  id: Label["id"];
-  title: Label["title"];
-  tailwindColor: Label["tailwindColor"];
-  cssColor: Label["cssolor"];
-  createdAt: Label["createdAt"];
-  updatedAt: Label["updatedAt"];
+  id: LABEL["id"];
+  title: LABEL["title"];
+  tailwindColor: LABEL["tailwindColor"];
+  cssColor: LABEL["cssolor"];
+  createdAt: LABEL["createdAt"];
+  updatedAt: LABEL["updatedAt"];
 }[];
 
 // getLists query returns an array of Lists
-export type GetListsResult = List[];
+export type GetListsResult = LIST[];
 
 // getList query returns a List
-export type GetListResult = List;
+export type GetListResult = LIST;

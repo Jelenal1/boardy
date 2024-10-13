@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Card, Label } from "~/app/utils/types";
+import type { CARD, LABEL } from "~/utils/types";
 import {
   Select,
   SelectContent,
@@ -10,12 +10,12 @@ import {
   SelectValue,
 } from "./ui/select";
 
-const Card = ({ initialCard }: { initialCard: Card }) => {
-  const [card, setCard] = useState<Card>(initialCard);
+const Card = ({ initialCard }: { initialCard: CARD }) => {
+  const [card, setCard] = useState<CARD>(initialCard);
   const [status, setStatus] = useState<"todo" | "inprogress" | "done">(
     card.status,
   );
-  const [labels, setLabels] = useState<Label[]>([]);
+  const [labels, setLabels] = useState<LABEL[]>([]);
 
   const updateStatus = async (value: "todo" | "inprogress" | "done") => {
     setCard({ ...card, status: value });
@@ -30,12 +30,12 @@ const Card = ({ initialCard }: { initialCard: Card }) => {
 
   useEffect(() => {
     setCard(initialCard);
-  }, [initialCard]);
+  }, []);
 
   return (
     <div
       key={card.id}
-      className="mx-auto flex w-full max-w-[300px] flex-col gap-4 rounded-md border-2 border-white p-4 text-center"
+      className="mx-auto flex w-full flex-col gap-4 rounded-md border-2 border-white p-4 text-center"
     >
       <h2
         className="rounded-md text-xl font-bold outline outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
