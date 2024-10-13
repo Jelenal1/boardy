@@ -45,7 +45,10 @@ export const labelTable = createTable(
 export const cardToLabel = createTable(
   "card_to_label",
   {
-    cardId: integer("card_id").references(() => cardTable.id),
+    cardId: integer("card_id").references(() => cardTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
     labelId: integer("label_id").references(() => labelTable.id),
   },
   (cardToLabel) => ({
@@ -62,14 +65,17 @@ export const cardTable = createTable(
   {
     id: serial("id").primaryKey(),
     user_uids: text("user_uids").array().default([]).notNull(),
+    listId: integer("list_id")
+      .references(() => listTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
+      .notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     status: Status("status").default("todo").notNull(),
     description: text("description"),
     position: integer("position").unique().notNull(),
     dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
-    listId: integer("list_id")
-      .references(() => listTable.id)
-      .notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -88,7 +94,10 @@ export const listTable = createTable(
     id: serial("id").primaryKey(),
     user_uids: text("user_uids").array().default([]).notNull(),
     boardId: integer("board_id")
-      .references(() => boardTable.id)
+      .references(() => boardTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
       .notNull(),
     position: integer("position").unique().notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),

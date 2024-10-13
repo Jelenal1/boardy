@@ -73,6 +73,10 @@ export async function updateList(list: Omit<LIST, "createdAt" | "updatedAt">) {
     .returning();
 }
 
+export async function deleteList(id: number) {
+  return await db.delete(listTable).where(eq(listTable.id, id));
+}
+
 export async function getListsByBoardId(boardId: number) {
   return await db
     .select()
