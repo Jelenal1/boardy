@@ -14,8 +14,8 @@ export default async function page({ params }: { params: { id: string } }) {
   const lists: LIST[] = await getListsByBoardId(Number(params.id));
 
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <div className="mx-2 flex max-h-screen w-full overflow-x-scroll">
+    <main>
+      <div className="mx-2 flex max-h-[calc(100vh-4rem)] overflow-x-scroll">
         {lists.map((list) => (
           <List key={list.id} initialList={list} />
         ))}

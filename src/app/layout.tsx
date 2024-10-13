@@ -5,6 +5,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { CiViewBoard } from "react-icons/ci";
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -23,11 +24,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body className="bg-zinc-900 text-white">
-          <header>
-            <div>
-              <h1>Boardy</h1>
-            </div>
-            <div className="ml-auto mr-10">
+          <header className="flex h-16 items-center px-2">
+            <CiViewBoard className="text-4xl" />
+            <h1 className="text-3xl">Boardy</h1>
+
+            <div className="ml-auto">
               <SignedOut>
                 <SignInButton />
               </SignedOut>

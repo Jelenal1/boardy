@@ -59,8 +59,18 @@ export async function getLabelsOfCard(cardId: number) {
     .where(eq(cardTable.id, cardId));
 }
 
-export async function createList(list: Omit<LIST, "id" | "createdAt" | "updatedAt">) {
+export async function createList(
+  list: Omit<LIST, "id" | "createdAt" | "updatedAt">,
+) {
   return await db.insert(listTable).values(list).returning();
+}
+
+export async function updateList(list: Omit<LIST, "createdAt" | "updatedAt">) {
+  return await db
+    .update(listTable)
+    .set(list)
+    .where(eq(listTable.id, list.id))
+    .returning();
 }
 
 export async function getListsByBoardId(boardId: number) {
