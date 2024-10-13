@@ -1,10 +1,16 @@
 "use client";
 import { FaPlus } from "react-icons/fa6";
-import { Button } from "./ui/button";
 import { createCard } from "~/utils/queries";
 import { revalidate } from "~/utils/serverActions";
+import { Button } from "./ui/button";
 
-const AddCard = ({ listId }: { listId: number }) => {
+const AddCard = ({
+  listId,
+  position,
+}: {
+  listId: number;
+  position: number;
+}) => {
   const addCard = async () => {
     try {
       await createCard({
@@ -14,6 +20,7 @@ const AddCard = ({ listId }: { listId: number }) => {
         status: "todo",
         user_uids: [],
         dueDate: new Date(),
+        position: position,
       });
     } catch (error) {
       console.log(error);

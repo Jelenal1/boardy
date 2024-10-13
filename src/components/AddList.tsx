@@ -7,15 +7,18 @@ import { Button } from "./ui/button";
 const AddList = ({
   boardId,
   userIds,
+  position,
 }: {
   boardId: number;
   userIds: string[];
+  position: number;
 }) => {
   const addList = async () => {
     await createList({
       boardId: boardId,
       user_uids: userIds,
-      title: "",
+      title: "Title",
+      position: position,
     });
     revalidate("/board/[id]");
   };

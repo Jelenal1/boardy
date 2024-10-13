@@ -65,6 +65,7 @@ export const cardTable = createTable(
     title: varchar("name", { length: 256 }).notNull().default(""),
     status: Status("status").default("todo").notNull(),
     description: text("description"),
+    position: integer("position").unique().notNull(),
     dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
     listId: integer("list_id")
       .references(() => listTable.id)
@@ -89,6 +90,7 @@ export const listTable = createTable(
     boardId: integer("board_id")
       .references(() => boardTable.id)
       .notNull(),
+    position: integer("position").unique().notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)

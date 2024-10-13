@@ -15,11 +15,15 @@ export default async function page({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <div className="mx-2 flex max-h-[calc(100vh-4rem)] overflow-x-scroll">
-        {lists.map((list) => (
+      <div className="mx-2 flex h-[calc(100vh-4rem)] overflow-x-scroll">
+        {lists.map((list, index) => (
           <List key={list.id} initialList={list} />
         ))}
-        <AddList boardId={Number(params.id)} userIds={[userId]} />
+        <AddList
+          boardId={Number(params.id)}
+          userIds={[userId]}
+          position={lists.length + 1}
+        />
       </div>
     </main>
   );
