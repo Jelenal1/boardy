@@ -9,17 +9,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { deleteList } from "~/utils/queries";
 import { revalidate } from "~/utils/serverActions";
-import { LIST } from "~/utils/types";
-import Dialog from "./Dialog";
+import Dialog from "../Dialog";
 
-const ListMoreButton = ({
+const MoreButton = ({
   className,
-  list,
+  serverDeleteAction,
 }: {
   className?: string;
-  list: LIST;
+  serverDeleteAction: () => void | Promise<void>;
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogAction, setDialogAction] = useState<() => void | Promise<void>>(
@@ -30,13 +28,13 @@ const ListMoreButton = ({
 
   const handleDeleteAction = () => {
     setDialogAction(() => async () => {
-      await deleteList(list.id);
+      await serverDeleteAction();
       setIsDialogOpen(false);
       revalidate("/board/[id]");
     });
     setDialogTitle("Delete List");
     setDialogContent(
-      "Are you sure you want to delete this list? This action cannot be undone.",
+      "Are you sure you want to delete this card? This action cannot be undone.",
     );
     setIsDialogOpen(true); // Open the dialog
   };
@@ -66,4 +64,4 @@ const ListMoreButton = ({
   );
 };
 
-export default ListMoreButton;
+export default MoreButton;

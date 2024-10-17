@@ -1,9 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { LuText } from "react-icons/lu";
-import { updateCard } from "~/utils/queries";
+import { deleteCard, updateCard } from "~/utils/queries";
 import type { CARD } from "~/utils/types";
-import CardMoreButton from "./CardMoreButton";
+import MoreButton from "./helper_components/MoreButton";
 import ReactiveInput from "./ReactiveInput";
 
 const Card = ({ initialCard }: { initialCard: CARD }) => {
@@ -19,7 +19,13 @@ const Card = ({ initialCard }: { initialCard: CARD }) => {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4 rounded-md border-2 border-zinc-900 p-4 text-center">
-      <CardMoreButton card={initialCard} className="ml-auto" />
+      <MoreButton
+        serverDeleteAction={async () => {
+          "use server";
+          await deleteCard(initialCard.id);
+        }}
+        className="ml-auto"
+      />
 
       <ReactiveInput
         headerText={initialCard.title}

@@ -1,15 +1,9 @@
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
-import { CiViewBoard } from "react-icons/ci";
+import { ClerkProvider } from "@clerk/nextjs";
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import Navbar from "~/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -24,20 +18,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body className="bg-zinc-900 text-white">
-          <header className="flex h-16 items-center px-2">
-            <CiViewBoard className="text-4xl" />
-            <h1 className="text-3xl">Boardy</h1>
-
-            <div className="ml-auto">
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </div>
-          </header>
-
+          <Navbar />
           {children}
         </body>
       </html>

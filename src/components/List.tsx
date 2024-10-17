@@ -1,8 +1,8 @@
-import { getCardsOfList, updateList } from "~/utils/queries";
+import { deleteList, getCardsOfList, updateList } from "~/utils/queries";
 import type { LIST } from "~/utils/types";
-import AddCard from "./AddCard";
 import Card from "./Card";
-import ListMoreButton from "./ListMoreButton";
+import AddCard from "./helper_components/AddCard";
+import MoreButton from "./helper_components/MoreButton";
 import ReactiveHeader from "./ReactiveHeader";
 
 const List = async ({ initialList }: { initialList: LIST }) => {
@@ -10,7 +10,13 @@ const List = async ({ initialList }: { initialList: LIST }) => {
 
   return (
     <div className="relative mx-2 flex h-full min-w-72 flex-col gap-4 overflow-y-scroll rounded-md bg-gray-600 p-4">
-      <ListMoreButton list={initialList} className="ml-auto" />
+      <MoreButton
+        serverDeleteAction={async () => {
+          "use server";
+          deleteList(initialList.id);
+        }}
+        className="ml-auto"
+      />
       <ReactiveHeader
         className="mx-1 whitespace-pre-line rounded-md p-1 text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
         emptyClassName="mx-1 rounded-md p-1 text-xl outline outline-dashed outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-50"

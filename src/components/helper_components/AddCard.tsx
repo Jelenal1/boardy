@@ -2,7 +2,7 @@
 import { FaPlus } from "react-icons/fa6";
 import { createCard } from "~/utils/queries";
 import { revalidate } from "~/utils/serverActions";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 const AddCard = ({
   listId,
