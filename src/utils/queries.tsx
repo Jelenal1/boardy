@@ -1,13 +1,14 @@
 "use server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import {
+  boardTable,
   cardTable,
   cardToLabel,
   labelTable,
   listTable,
 } from "~/server/db/schema";
-import { CARD, LIST } from "./types";
+import { BOARD, CARD, LIST } from "./types";
 
 export async function updateCard(card: Omit<CARD, "createdAt" | "updatedAt">) {
   return await db
@@ -102,4 +103,42 @@ export async function getLists() {
 
 export async function getList(id: number) {
   return await db.select().from(cardTable).where(eq(cardTable.id, id)).limit(1);
+}
+
+export async function createBoard(
+  board: Omit<BOARD, "id" | "createdAt" | "updatedAt">,
+) {
+  return await db.insert(boardTable).values(board).returning();
+}
+
+export async function updateBoard(
+  board: Omit<BOARD, "createdAt" | "updatedAt">,
+) {
+  return await db
+    .update(boardTable)
+    .set(board)
+    .where(eq(boardTable.id, Number(board.id)));
+}
+
+export async function deleteBoard(id: number) {
+  await db.delete(boardTable).where(eq(boardTable.id, id));
+}
+
+export async function getBoards() {
+  return await db.select().from(boardTable);
+}
+
+export async function getBoardsByUserId(userId: string) {
+  return await db
+    .select()
+    .from(boardTable)
+    .where(sql`${userId} = ANY(${boardTable.user_uids})`);
+}
+
+export async function getBoard(id: number) {
+  return await db
+    .select()
+    .from(boardTable)
+    .where(eq(boardTable.id, id))
+    .limit(1);
 }

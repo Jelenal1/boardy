@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import AddList from "~/components/AddList";
+import AddList from "~/components/helper_components/AddList";
 import List from "~/components/List";
 import { getListsByBoardId } from "~/utils/queries";
 import { LIST } from "~/utils/types";
