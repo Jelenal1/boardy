@@ -6,10 +6,7 @@ import { createBoard } from "~/utils/queries";
 import { revalidate } from "~/utils/serverActions";
 import { Button } from "../ui/button";
 
-const AddBoard = () => {
-  const router = useRouter();
-  const userId = useAuth().userId;
-  if (!userId) router.push("/signin");
+const AddBoard = ({ userId }: { userId: string }) => {
 
   const addBoard = async () => {
     await createBoard({

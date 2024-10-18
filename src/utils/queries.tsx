@@ -1,5 +1,5 @@
 "use server";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import {
   boardTable,
@@ -37,13 +37,7 @@ export async function getCardsOfList(listId: number) {
 }
 
 export async function getCard(id: number) {
-  const card = await db
-    .select()
-    .from(cardTable)
-    .where(eq(cardTable.id, id))
-    .limit(1);
-
-  return card;
+  return (await db.select().from(cardTable).where(eq(cardTable.id, id)))[0];
 }
 
 export async function getLabels() {
@@ -102,7 +96,7 @@ export async function getLists() {
 }
 
 export async function getList(id: number) {
-  return await db.select().from(cardTable).where(eq(cardTable.id, id)).limit(1);
+  return (await db.select().from(cardTable).where(eq(cardTable.id, id)))[0];
 }
 
 export async function createBoard(
@@ -136,9 +130,5 @@ export async function getBoardsByUserId(userId: string) {
 }
 
 export async function getBoard(id: number) {
-  return await db
-    .select()
-    .from(boardTable)
-    .where(eq(boardTable.id, id))
-    .limit(1);
+  return (await db.select().from(boardTable).where(eq(boardTable.id, id)))[0];
 }

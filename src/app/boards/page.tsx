@@ -1,5 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import Board from "~/components/Board";
 import AddBoard from "~/components/helper_components/AddBoard";
 import { getBoardsByUserId } from "~/utils/queries";
 
@@ -9,18 +10,19 @@ const Page = async () => {
   if (!userId) redirect("/signin");
   const boards = await getBoardsByUserId(userId);
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="flex min-h-screen flex-col items-center p-4">
       <h1 className="text-3xl font-bold">Your Boards</h1>
-      <AddBoard />
-      {boards?.map((board) => (
-        <div key={board.id}>
-          <a href={`/boards/${board.id}`}>
-            <div className="h-72 w-96 rounded-md bg-gray-600 p-4 text-center">
-              <h2>{board.title}</h2>
-            </div>
-          </a>
-        </div>
-      ))}
+      <AddBoard userId={userId} />
+      <div className="mt-4 grid grid-cols-4 gap-4">
+        {boards?.map(async (board) => {
+          const { data: users } = await clerkClient().users.getUserList({
+            userId: board.user_uids,
+            limit: 100,
+          });
+
+          return <Board key={board.id} board={board} users={users} />;
+        })}
+      </div>
     </main>
   );
 };

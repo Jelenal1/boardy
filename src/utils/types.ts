@@ -17,7 +17,7 @@ export type LABEL = typeof labelTable.$inferSelect;
 export type LIST = typeof listTable.$inferSelect;
 
 // Full row type of 'boardTable'
-export type BOARD = typeof boardTable.$inferInsert;
+export type BOARD = typeof boardTable.$inferSelect;
 
 // Types for queries
 

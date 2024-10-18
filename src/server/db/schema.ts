@@ -74,7 +74,7 @@ export const cardTable = createTable(
     title: varchar("name", { length: 256 }).notNull().default(""),
     status: Status("status").default("todo").notNull(),
     description: text("description").default("").notNull(),
-    position: integer("position").unique().notNull(),
+    position: integer("position").notNull(),
     dueDate: timestamp("due_date", { withTimezone: true }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -99,7 +99,7 @@ export const listTable = createTable(
         onUpdate: "cascade",
       })
       .notNull(),
-    position: integer("position").unique().notNull(),
+    position: integer("position").notNull(),
     title: varchar("name", { length: 256 }).notNull().default(""),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -118,7 +118,7 @@ export const boardTable = createTable(
   {
     id: serial("id").primaryKey(),
     user_uids: text("user_uids").array().default([]).notNull(),
-    title: varchar("name", { length: 256 }).notNull().default(""),
+    title: varchar("name", { length: 256 }).notNull().default(" "),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
