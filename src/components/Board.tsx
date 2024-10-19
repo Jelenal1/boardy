@@ -9,13 +9,8 @@ const Board = ({ board, users }: { board: BOARD; users: User[] }) => {
         <p>{board.user_uids.length} members</p>
         <div className="flex items-center">
           {users?.map((user) => (
-            <div className="flex flex-col items-center">
-              <img
-                src={user.imageUrl}
-                key={user.id}
-                alt=""
-                className="w-10 rounded-full"
-              />
+            <div key={user.id} className="flex flex-col items-center">
+              <img src={user.imageUrl} alt="" className="w-10 rounded-full" />
               <p>{user.username}</p>
             </div>
           ))}

@@ -3,11 +3,15 @@ import { redirect } from "next/navigation";
 import Board from "~/components/Board";
 import AddBoard from "~/components/helper_components/AddBoard";
 import { getBoardsByUserId } from "~/utils/queries";
+import { revalidate } from "~/utils/serverActions";
 
 const Page = async () => {
   // get boards by user id of current clerk user
   const { userId } = auth();
   if (!userId) redirect("/signin");
+  if (userId) {
+    revalidate("/boards");
+  }
   const boards = await getBoardsByUserId(userId);
   return (
     <main className="flex min-h-screen flex-col items-center p-4">

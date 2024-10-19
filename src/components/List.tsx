@@ -2,7 +2,7 @@ import { deleteList, getCardsOfList, updateList } from "~/utils/queries";
 import type { LIST } from "~/utils/types";
 import Card from "./Card";
 import AddCard from "./helper_components/AddCard";
-import MoreButton from "./helper_components/MoreButton";
+import MoreButton from "./MoreButton";
 import ReactiveHeader from "./ReactiveHeader";
 
 const List = async ({ initialList }: { initialList: LIST }) => {

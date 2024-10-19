@@ -1,13 +1,12 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { CiViewBoard } from "react-icons/ci";
+import { revalidate } from "~/utils/serverActions";
 
 const Navbar = async () => {
   const { userId } = auth();
-  if (!userId) redirect("/signin");
   return (
-    <header className="flex h-16 items-center px-2">
+    <div className="flex h-16 items-center px-2">
       <a href={userId ? `/boards` : `/`}>
         <div className="flex select-none">
           <CiViewBoard className="text-4xl" />
@@ -22,7 +21,7 @@ const Navbar = async () => {
           <UserButton />
         </SignedIn>
       </div>
-    </header>
+    </div>
   );
 };
 

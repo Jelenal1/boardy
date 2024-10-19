@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { LuText } from "react-icons/lu";
 import { deleteCard, updateCard } from "~/utils/queries";
 import type { CARD } from "~/utils/types";
-import MoreButton from "./helper_components/MoreButton";
+import MoreButton from "./MoreButton";
 import ReactiveInput from "./ReactiveInput";
 
 const Card = ({ initialCard }: { initialCard: CARD }) => {

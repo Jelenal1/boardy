@@ -10,13 +10,15 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { revalidate } from "~/utils/serverActions";
-import Dialog from "../Dialog";
+import Dialog from "./Dialog";
 
 const MoreButton = ({
   className,
+  classNameButton,
   serverDeleteAction,
 }: {
   className?: string;
+  classNameButton?: string;
   serverDeleteAction: () => void | Promise<void>;
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -43,7 +45,7 @@ const MoreButton = ({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className={className}>
-          <HiDotsVertical className="rounded-full bg-zinc-900 py-1 text-xl" />
+          <HiDotsVertical className={classNameButton ? classNameButton : "rounded-full bg-zinc-900 py-1 text-xl"} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>

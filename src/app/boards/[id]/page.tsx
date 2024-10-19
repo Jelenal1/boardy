@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import AddList from "~/components/helper_components/AddList";
-import MoreButton from "~/components/helper_components/MoreButton";
+import MoreButton from "~/components/MoreButton";
 import List from "~/components/List";
 import ReactiveHeader from "~/components/ReactiveHeader";
 import {
