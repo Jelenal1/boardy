@@ -4,6 +4,7 @@ import Card from "./Card";
 import AddCard from "./helper_components/AddCard";
 import MoreButton from "./MoreButton";
 import ReactiveHeader from "./ReactiveHeader";
+import { revalidatePage } from "~/utils/serverActions";
 
 const List = async ({ initialList }: { initialList: LIST }) => {
   const cards = await getCardsOfList(initialList.id);
@@ -14,8 +15,10 @@ const List = async ({ initialList }: { initialList: LIST }) => {
         serverDeleteAction={async () => {
           "use server";
           deleteList(initialList.id);
+          revalidatePage("/board/[id]");
         }}
         className="ml-auto"
+        titleDialog="List"
       />
       <ReactiveHeader
         className="mx-1 whitespace-pre-line rounded-md p-1 text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"

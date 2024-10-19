@@ -5,6 +5,7 @@ import { deleteCard, updateCard } from "~/utils/queries";
 import type { CARD } from "~/utils/types";
 import MoreButton from "./MoreButton";
 import ReactiveInput from "./ReactiveInput";
+import { revalidatePage } from "~/utils/serverActions";
 
 const Card = ({ initialCard }: { initialCard: CARD }) => {
   const { userId } = auth();
@@ -23,8 +24,10 @@ const Card = ({ initialCard }: { initialCard: CARD }) => {
         serverDeleteAction={async () => {
           "use server";
           await deleteCard(initialCard.id);
+          revalidatePage("/board/[id]");
         }}
         className="ml-auto"
+        titleDialog="Card"
       />
 
       <ReactiveInput

@@ -9,16 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { revalidate } from "~/utils/serverActions";
+import { revalidatePage } from "~/utils/serverActions";
 import Dialog from "./Dialog";
 
 const MoreButton = ({
   className,
   classNameButton,
+  titleDialog,
   serverDeleteAction,
 }: {
   className?: string;
   classNameButton?: string;
+  titleDialog: string;
   serverDeleteAction: () => void | Promise<void>;
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,12 +34,9 @@ const MoreButton = ({
     setDialogAction(() => async () => {
       await serverDeleteAction();
       setIsDialogOpen(false);
-      revalidate("/board/[id]");
     });
-    setDialogTitle("Delete List");
-    setDialogContent(
-      "Are you sure you want to delete this card? This action cannot be undone.",
-    );
+    setDialogTitle("Delete " + titleDialog);
+    setDialogContent("Are you sure you want to delete " + titleDialog + "?");
     setIsDialogOpen(true); // Open the dialog
   };
 
@@ -45,7 +44,13 @@ const MoreButton = ({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className={className}>
-          <HiDotsVertical className={classNameButton ? classNameButton : "rounded-full bg-zinc-900 py-1 text-xl"} />
+          <HiDotsVertical
+            className={
+              classNameButton
+                ? classNameButton
+                : "rounded-full bg-zinc-900 py-1 text-xl"
+            }
+          />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>

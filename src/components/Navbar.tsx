@@ -1,7 +1,7 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { CiViewBoard } from "react-icons/ci";
-import { revalidate } from "~/utils/serverActions";
+import { revalidatePage } from "~/utils/serverActions";
 
 const Navbar = async () => {
   const { userId } = auth();

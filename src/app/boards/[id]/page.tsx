@@ -11,6 +11,8 @@ import {
   updateBoard,
 } from "~/utils/queries";
 import { BOARD, LIST } from "~/utils/types";
+import { revalidatePage } from "~/utils/serverActions";
+import ReactiveInput from "~/components/ReactiveInput";
 
 export const revalidate = 1;
 
@@ -25,8 +27,18 @@ export default async function page({ params }: { params: { id: string } }) {
   if (!board) redirect("/not-found");
 
   return (
-    <main className="m-4 rounded-md">
-      <div className="flex">
+    <main className="m-4 rounded-md border border-gray-600 px-4">
+      <div className="flex gap-4">
+        <MoreButton
+          classNameButton="bg-gray-600 p-1 rounded-full text-xl"
+          serverDeleteAction={async () => {
+            "use server";
+            await deleteBoard(Number(params.id));
+            revalidatePage("/boards");
+            redirect("/boards");
+          }}
+          titleDialog="Board"
+        />
         <ReactiveHeader
           handleUpdate={async (innerText) => {
             "use server";
@@ -35,16 +47,9 @@ export default async function page({ params }: { params: { id: string } }) {
               title: innerText,
             });
           }}
-          headerText={board.title ?? ""}
-          className="m-5 w-[calc(100%-4rem)] whitespace-pre-line rounded-md p-1 text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
-          emptyClassName="m-5  rounded-md p-1 text-xl outline outline-dashed outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-50"
-        />
-        <MoreButton
-          serverDeleteAction={async () => {
-            "use server";
-            await deleteBoard(Number(params.id));
-            redirect("/boards");
-          }}
+          headerText={board.title}
+          className="my-4 w-96 whitespace-pre-line rounded-md bg-transparent p-1 text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
+          emptyClassName="my-4 w-96 rounded-md p-1 text-xl border border-dashed focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-50"
         />
       </div>
       <div className="mx-2 flex h-[calc(100vh-8.6rem)] overflow-x-scroll">

@@ -4,7 +4,7 @@ import { BOARD } from "~/utils/types";
 const Board = ({ board, users }: { board: BOARD; users: User[] }) => {
   return (
     <a href={`/boards/${board.id}`}>
-      <div className="h-72 w-96 rounded-md bg-gray-600 p-4 text-center">
+      <div className="m-auto h-72 w-96 rounded-md bg-gray-600 p-4 text-center">
         <h1>{board.title}</h1>
         <p>{board.user_uids.length} members</p>
         <div className="flex items-center">

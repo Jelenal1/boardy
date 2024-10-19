@@ -1,7 +1,7 @@
 "use client";
 import { FaPlus } from "react-icons/fa6";
 import { createCard } from "~/utils/queries";
-import { revalidate } from "~/utils/serverActions";
+import { revalidatePage } from "~/utils/serverActions";
 import { Button } from "../ui/button";
 
 const AddCard = ({
@@ -26,7 +26,7 @@ const AddCard = ({
       console.log(error);
       // TODO: handle error
     }
-    revalidate("/board/[id]");
+    revalidatePage("/board/[id]");
   };
 
   return (
