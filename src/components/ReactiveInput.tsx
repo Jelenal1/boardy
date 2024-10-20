@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ReactiveInput = ({
   headerText,
@@ -9,7 +9,7 @@ const ReactiveInput = ({
   emptyClassName,
   label,
   icon,
-  inputType,
+  rows = 1,
 }: {
   headerText: string;
   handleUpdate: (innerText: string) => void;
@@ -17,36 +17,35 @@ const ReactiveInput = ({
   emptyClassName?: string;
   label?: string;
   icon?: React.ReactNode;
-  inputType?: string;
+  rows?: number;
 }) => {
   const notEmptyStyle =
     className ||
-    "w-full whitespace-pre-line rounded-md p-1 text-xl text-black focus:outline-none focus:ring-2 focus:ring-blue-500";
+    "w-full whitespace-pre-line rounded-md p-1 text-xl text-black focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none";
   const emptyStyle =
     emptyClassName ||
-    "w-full rounded-md p-1 text-xl outline outline-dashed text-black outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-50";
+    "w-full rounded-md p-1 text-xl outline outline-dashed text-black outline-1 focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-50 resize-none";
 
   const [isEmpty, setIsEmpty] = useState(headerText === "");
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  if (inputType === "textarea") {
-    return (
-      <>
-        <label htmlFor={label} className="flex items-center gap-2">
-          {label && icon}
-          {label}
-        </label>
-        <textarea
-          className={isEmpty ? emptyStyle : notEmptyStyle}
-          onChange={(e) => {
-            handleUpdate(e.currentTarget.value);
-            e.currentTarget.value === "" ? setIsEmpty(true) : setIsEmpty(false);
-          }}
-          defaultValue={headerText}
-          name={label}
-        />
-      </>
+  useEffect(() => {
+    // Aufräumen des Timeouts, wenn die Komponente unmontiert wird
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
+  useEffect(() => {
+    inputRef.current?.style.setProperty("height", "auto");
+    inputRef.current?.style.setProperty(
+      "height",
+      `${inputRef.current.scrollHeight}px`,
     );
-  }
+  }, []);
 
   return (
     <>
@@ -54,15 +53,32 @@ const ReactiveInput = ({
         {label && icon}
         {label}
       </label>
-      <input
+      <textarea
+        ref={inputRef}
         className={isEmpty ? emptyStyle : notEmptyStyle}
         onChange={(e) => {
-          handleUpdate(e.currentTarget.value);
-          e.currentTarget.value === "" ? setIsEmpty(true) : setIsEmpty(false);
+          inputRef.current?.style.setProperty("height", "auto");
+          inputRef.current?.style.setProperty(
+            "height",
+            `${e.currentTarget.scrollHeight}px`,
+          );
+          const currentValue = e.currentTarget.value || "";
+          currentValue === "" ? setIsEmpty(true) : setIsEmpty(false);
+
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+
+          const id = setTimeout(() => {
+            handleUpdate(currentValue);
+          }, 1000);
+
+          setTimeoutId(id);
         }}
         defaultValue={headerText}
         name={label}
-        type={inputType || "text"}
+        rows={rows}
+        style={{ height: "auto" }}
       />
     </>
   );

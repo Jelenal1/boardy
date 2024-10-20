@@ -46,7 +46,7 @@ const Card = ({ initialCard }: { initialCard: CARD }) => {
       <ReactiveInput
         label="Description"
         icon={<LuText />}
-        inputType="textarea"
+        rows={3}
         headerText={initialCard.description}
         handleUpdate={async (innerText) => {
           "use server";

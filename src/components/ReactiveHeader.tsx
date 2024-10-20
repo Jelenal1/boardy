@@ -14,12 +14,24 @@ const ReactiveHeader = ({
   handleUpdate: (innerText: string) => void;
 }) => {
   const [isEmpty, setIsEmpty] = useState(headerText === "");
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>();
+
   return (
     <div
       className={isEmpty ? emptyClassName : className}
       onInput={(e) => {
-        handleUpdate(e.currentTarget.innerText);
-        e.currentTarget.innerText === "" ? setIsEmpty(true) : setIsEmpty(false);
+        const currentValue = e.currentTarget.innerText || "";
+        currentValue === "" ? setIsEmpty(true) : setIsEmpty(false);
+
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
+        const id = setTimeout(() => {
+          handleUpdate(currentValue);
+        }, 1000);
+
+        setTimeoutId(id);
       }}
       contentEditable={true}
       suppressContentEditableWarning={true}
